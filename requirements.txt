@@ -1,0 +1,13 @@
+# Install torch/torchvision separately from https://download.pytorch.org/whl/cu128
+# Full installed environment is captured in requirements-lock.txt.
+numpy
+pandas
+pillow
+tqdm
+matplotlib
+scikit-learn
+scipy
+imagehash
+web3>=7,<8
+
+rich>=15,<16

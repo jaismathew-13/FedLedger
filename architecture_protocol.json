@@ -1,0 +1,46 @@
+{
+  "protocol_version": "peer_fedprox_v1",
+  "status": "registered_before_architecture_training",
+  "seed": 42,
+  "num_hospitals": 3,
+  "rounds": 20,
+  "local_epochs": 3,
+  "mu": 0.01,
+  "peer_validation": {
+    "metric": "balanced_accuracy",
+    "reviewers": "both_other_hospitals",
+    "required_approvals": 2,
+    "baseline": "incoming_global_model_on_the_same_reviewer_validation_partition",
+    "minimum_score_exclusive": 0.5,
+    "allowed_degradation": 0.0,
+    "ties_with_baseline": "accept_if_above_minimum_score",
+    "invalid_or_missing_review": "reject",
+    "nonfinite_model_parameters": "reject"
+  },
+  "aggregation": {
+    "formula": "weight_i = n_i * mean(peer_balanced_accuracy_i) / sum_accepted(n_j * mean(peer_balanced_accuracy_j))",
+    "reviewer_average": "equal_weight_across_the_two_reviewers",
+    "rejected_update_weight": 0,
+    "all_rejected": "retain_incoming_global_state_and_record_no_update_round",
+    "integer_buffers": "weighted_average_then_round_as_in_existing_core"
+  },
+  "validation_data": {
+    "source": "existing_patientsplit_val_only",
+    "hospital_assignment": "patient_group_stratified_as_close_as_possible_to_equal_sizes_seed_42",
+    "both_classes_required_per_hospital": true,
+    "selection": "pooled_validation_balanced_accuracy_over_the_unchanged_union_of_validation_images",
+    "selection_ties": "first_round",
+    "test_used_for_decisions": false
+  },
+  "transport": {
+    "format": "full_model_state_checkpoint",
+    "ipfs_scope": "isolated_local_development_network",
+    "upload_raw_images": false,
+    "record_rejected_decisions": true
+  },
+  "execution": {
+    "target": "three_hospital_workers_in_parallel",
+    "hardware_feasibility": "must_be_established_before_claiming_parallel_execution",
+    "do_not_silently_change_execution_mode": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "fedprox-blockchain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local Ethereum development tools for the FedProx model registry",
+  "scripts": {
+    "chain": "hardhat node --hostname 127.0.0.1 --port 8545",
+    "compile": "node compile.cjs"
+  },
+  "devDependencies": {
+    "hardhat": "3.20.0",
+    "solc": "0.8.30"
+  },
+  "type": "module"
+}
