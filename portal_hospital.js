@@ -37,7 +37,9 @@
   const owner=profile.wallet,activeSession=session,message=el('clientMessage').value;
   authorizationBusy=true;authorizationControls();
   try{
-   let accounts=await window.ethereum.request({method:'eth_accounts'});
+   el('clientNotice').textContent='Connecting to MetaMask. Unlock the wallet if prompted.';
+   let accounts=await window.ethereum.request({method:'eth_requestAccounts'});
+   if(session!==activeSession)throw Error('Wallet session changed. Sign in and prepare the client again.');
    if(accounts[0]?.toLowerCase()!==owner.toLowerCase())throw Error('Select the signed-in hospital owner account in MetaMask.');
    el('clientNotice').textContent='Approve the client authorization message in MetaMask.';
    const signature=await window.ethereum.request({method:'personal_sign',params:[message,owner]});
@@ -46,7 +48,7 @@
    el('clientNotice').textContent='Signature approved. Recording client authorization...';
    const d=await api('authorize-agent',{signature});el('clientMessage').value='';
    await refresh();return {status:'Client authorization completed',...d};
-  }catch(e){if(e.code===4001)throw Error('Authorization declined in MetaMask. You can try signing again.');throw e}
+  }catch(e){if(e.code===4001)throw Error('Authorization declined in MetaMask. You can try signing again.');if(e.code===-32002)throw Error('A MetaMask request is already pending. Open the MetaMask extension and complete or reject it before trying again.');throw e}
   finally{authorizationBusy=false;authorizationControls()}
  });
  el('clientConfigure').onclick=()=>act(async()=>{let d=await api('configure',{patient_namespace:el('clientNamespace').value});await refresh();return d});el('clientCampaign').onchange=render;

@@ -417,3 +417,11 @@ Hospital data workspaces now use the registered organization code. Preparing a c
 The current project name is **Fed-Ledger**. Both portals, their page titles, the shared sidebar/logo, new wallet login/delegation messages and audit export filename use this name. Historical signed messages and the original on-chain organization commitment namespace remain unchanged for compatibility.
 
 Client authorization now uses two controls: Prepare local client and Sign client authorization. After MetaMask approves the message, the portal automatically submits the signature to the existing owner-verification/on-chain authorization endpoint. No manual signature field or separate confirmation is shown. Controls are locked during requests to prevent duplicate submissions; account/session changes abort submission. Workspace status refreshes automatically.
+
+## Code-folder registration correction
+
+Renaming the displayed workspace does not update previously registered data manifests. Campaign71557a2c-c65f-4a6c-944c-df395e190920 failed before training because its frozen registrations still referenced UUID folders. This failed campaign and its manifests are preserved. Future campaign creation now rejects such registrations, and the admin labels affected hospitals re-register code folder. Each owner must click Check & register local data for the code-named workspace; then create a replacement campaign and opt in. No retrospective campaign rewrite or hash-check bypass is performed.
+
+## Retired obsolete active data registrations
+
+The current SNRSE/ASTER/RGRI code folders were byte-hashed and have no cross-hospital exact image overlap. Their data assignments differ from the original UUID registrations, which caused sequential registration to conflict with another hospital's stale manifest. After a SQLite/client-row backup and confirming no active training, only obsolete active manifest/summary pointers were cleared. Original manifests, campaign history, signed delegations and all image files were retained. Audit and retirement records are in multiseed_outputs/workspace_overlap_diagnosis.json and legacy_registration_retirement.json. Each hospital must register its code-named folder before a new campaign; exact-image and patient-overlap checks remain enforced. Zero byte overlap does not establish perceptual or patient independence.

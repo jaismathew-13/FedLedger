@@ -202,6 +202,14 @@ class Workflow:
                  'mu': policy['mu'], 'seed': policy['seed'], 'max_rounds': policy['rounds'],
                  'acceptance': policy['peer_validation'], 'aggregation': policy['aggregation']}]
 
+    def workspace_registration_current(self, identity, manifest):
+        if not manifest or not Path(manifest).is_file():
+            return False
+        saved = read_json(Path(manifest))
+        root = self.folder(identity)
+        paths = saved.get('fingerprints', {})
+        return bool(paths) and all(Path(path).is_relative_to(root) for path in paths)
+
     def create(self, token, payload):
         self.management.admin(token)
         identities = payload.get('hospital_ids', [])
@@ -220,6 +228,8 @@ class Workflow:
                 client = db.execute('SELECT * FROM portal_clients WHERE hospital=?', (identity,)).fetchone()
                 if not hospital or hospital['status'] != 'approved' or not client or not client['manifest'] or not client['consent']:
                     raise ValueError('Each hospital needs approval, local data configuration and signed client delegation.')
+                if not self.workspace_registration_current(identity, client['manifest']):
+                    raise ValueError(f'{hospital["code"]}: data registration uses an old workspace. In the hospital portal, click Check & register local data for the code-named folder, then register a new campaign. Existing campaigns and manifests are preserved.')
                 if not delegation.eligible(hospital['wallet'], client['delegate']):
                     raise ValueError('Client delegation is not currently authorized on-chain.')
                 summary = json.loads(client['summary'])
@@ -351,11 +361,7 @@ class Workflow:
                     continue
                 clients.append({'hospital': client['hospital'], 'delegate': client['delegate'],
                     'authorized_consent': bool(client['consent']), 'last_successful_sync':client['sync_utc'], 'data': json.loads(client['summary'] or 'null')})
-                if not admin:
-                    saved = read_json(Path(client['manifest'])) if client['manifest'] else None
-                    root = self.folder(owner['id'])
-                    clients[-1]['workspace_data_current'] = bool(saved) and all(
-                        Path(path).is_relative_to(root) for path in saved['fingerprints'])
+                clients[-1]['workspace_data_current'] = self.workspace_registration_current(client['hospital'], client['manifest'])
         result = {'campaigns': campaigns, 'clients': clients, 'approved_configurations': self.configurations(),
             'scope': 'Local client workers, no remote hospital or OS-level tenant isolation.',
             'comparison': 'FedAvg not run; no comparison data available.'}
