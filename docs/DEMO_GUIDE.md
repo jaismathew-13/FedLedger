@@ -1,37 +1,51 @@
-# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+# Presentation guide
 
-## Demonstration and presentation guide
+This curated folder is intended for a source walkthrough. It does not include
+the dataset, trained checkpoints, local registrations, or generated run state
+needed for a live demo.
 
-## Demonstration sequence
+## Suggested walkthrough
 
-1. Run ` .\.venv_runtime\Scripts\python.exe start_project.py ` from D:\dataset. Keep the existing Hardhat node running. Open http://127.0.0.1:8765.
-2. Overview: show the completed run, algorithm, latest version and chain connection. Explain best checkpoint versus latest version.
-3. Monitor: select a round with accepted updates and one with all rejected. Explain two independent peer decisions and retained global behavior.
-4. Performance: inspect validation curves, best-round selection and plateau. State that no independent external accuracy is established.
-5. IPFS Desktop: Files > training > run_20261020T093433_860908Z. Open a round to show hospital/global model references. These are model files, not raw X-rays.
-6. Explorer: filter the same round, load live details, inspect a receipt/block number, timestamp and CID. Cards represent actual run receipts; unrelated blocks are omitted.
-7. Audit: verify round/client. Show model CID, committed and recalculated hashes, local validation evidence hashes and final acceptance decision.
-8. Prediction: use a public demonstration X-ray, choose best model, predict, then another saved version. Explain scores are uncalibrated; inference is not diagnosis. Prediction images/results stay out of blockchain.
-
-## Presentation outline
-
-- Problem and research objective: distributed pneumonia classification with auditable model updates.
-- Data preparation: patient grouping, exact deduplication, original images preserved.
-- Architecture: local FedProx, local IPFS transport, peer validation, chain commitments and adaptive off-chain aggregation.
-- Implementation: simulated clients on one GPU; localhost services; full local model state artifacts.
-- Results: show RESULTS.md and actual validation curves; explain rejected rounds and retained model.
-- Demonstration: trace a client CID through a receipt to a verified global checkpoint and prediction.
-- Limitations: independence, one seed, inferred patient IDs, local development chain and no clinical/privacy/robustness guarantees.
-- Future work: obtain valid external data, patient-cluster uncertainty and pre-registered replication.
+1. **Problem and scope** — introduce the goal: train a shared pneumonia
+   classifier without centralizing each simulated hospital's training images.
+   Be clear that the hospitals run on one computer.
+2. **Architecture** — use [ARCHITECTURE_DIAGRAM.md](ARCHITECTURE_DIAGRAM.md)
+   to trace the path from the incoming global model, through local training and
+   peer review, to aggregation and publication of the next global model.
+3. **Portal and coordination** — show `project_dashboard.py`,
+   `hospital_management.py`, and `portal_workflow.py` as the access, enrollment,
+   and campaign layers. `round_coordinator.py` is the visible orchestration
+   entry point for registered rounds.
+4. **Learning and acceptance** — explain that `fedprox_core.py` performs local
+   learning, `hospital_workers.py` and `portal_workers.py` run local work, and
+   `peer_policy.py` defines review decisions and aggregation weights.
+5. **Storage and audit** — `architecture_io.py` handles local IPFS references
+   and integrity checks. `blockchain/contracts/` and the Python adapters record
+   membership, client authorization, updates, peer decisions, and global-model
+   references. The chain does not prove that the reported training or reviews
+   are honest.
+6. **Results and limitations** — use [RESULTS.md](../RESULTS.md), emphasizing
+   that the reported metrics are validation results from a historical run, not
+   independent clinical accuracy.
 
 ## Likely questions
 
-**Does blockchain store images?** No. It records model references, hashes, peer decisions and evidence hashes.
+**Are the hospitals independent systems?** No. They are simulated on one
+computer in this prototype.
 
-**Does IPFS guarantee privacy?** No. This demonstration uses an isolated local node. Model updates can still expose information; no formal privacy guarantee is claimed.
+**Are images written to the blockchain?** No. The chain records identifiers,
+hashes, and decisions; model artifacts are handled off-chain.
 
-**Why many rejections?** Candidates often failed to match the incoming global on at least one reviewer's validation set; both approvals are required.
+**Does IPFS provide privacy?** No. Local artifact storage is not a formal
+privacy mechanism, and model updates can still reveal information.
 
-**Why no FedAvg chart?** The current experiment is FedProx-only; no comparison data are invented.
+**Does the blockchain prove a model is correct?** No. It preserves recorded
+claims and references; it does not prove the correctness of training, labels,
+or peer validation.
 
-**Is the final accuracy independently validated?** No; current main metrics are validation results and proposed external data showed content overlap.
+**Is the reported score independently validated?** No. The historical results
+are validation metrics and have documented dataset limitations. Do not present
+them as independent test accuracy or clinical performance.
+
+**Can I launch the full demo from this folder?** No. Required runtime state,
+data, trained models, and setup launchers are not included.

@@ -1,2 +1,0 @@
-# Optional dashboard browser regression tests; use installed Edge.
-playwright==1.64.0

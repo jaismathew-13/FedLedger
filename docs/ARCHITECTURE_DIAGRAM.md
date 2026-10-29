@@ -79,4 +79,4 @@ flowchart TB
 | Smart contracts | `blockchain/contracts/HospitalDirectory.sol`, `ClientAuthorization.sol`, `FederatedProtocolRegistry.sol` |
 | Independent explorer | `blockchain/blockscout/` |
 
-See [portal workflow](PORTAL_WORKFLOW_GUIDE.md) for operation and [project context](../PROJECT_CONTEXT.md) for experiment history and remaining limitations. This is a research prototype, not a clinical diagnostic system.
+See the [portal workflow](PORTAL_WORKFLOW_GUIDE.md) and [presentation guide](DEMO_GUIDE.md) for a source walkthrough. Historical results and limitations are summarized in [RESULTS.md](../RESULTS.md). This is a research prototype, not a clinical diagnostic system.
