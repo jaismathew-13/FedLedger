@@ -70,6 +70,7 @@ reports/
 *.jpg
 *.jpeg
 *.png
+!docs/report/code_screenshots/*.png
 *.bmp
 *.dcm
 *.dicom

@@ -1,12 +1,18 @@
-# Standalone blockchain explorer: Blockscout
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Standalone blockchain explorer: Blockscout
 
 ## Status
 
-Docker Desktop and WSL3.0.3 are installed. Docker Compose accepted the configuration.
-Windows requires a restart to activate WSL; the Docker engine and explorer are not
-running. Runtime verification remains pending. Do not present the explorer as working
-merely because these configuration files exist. Current status is recorded in
-`multiseed_outputs/blockscout/setup_status.json`.
+Blockscout is running at **http://localhost:4000** (verified27October2026).
+Docker's Linux engine and WSL2 now work. Homepage, Blocks page and API return200;
+indexed block hashes and transaction receipts were compared directly with Hardhat.
+Verification evidence and exact image digests:
+`multiseed_outputs/blockscout/live_verification.json`.
+Current setup state: `multiseed_outputs/blockscout/setup_status.json`.
+
+The current chain is a fresh development instance. Earlier transaction evidence is
+archived; this explorer displays the current chain, not the old chain's history.
 
 This is the standard Blockscout frontend and backend, independent of our dashboard.
 It reads the existing local Hardhat node at `http://127.0.0.1:8545`, chain31337.

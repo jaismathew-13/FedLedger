@@ -1,4 +1,8 @@
-# Target architecture supplied by the user
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Target architecture supplied by the user
+
+For the current implementation, see the [Fed-Ledger architecture diagram](ARCHITECTURE_DIAGRAM.md). The gap table below is historical.
 
 The user's flowchart is the target design. Existing artifacts are evidence for the earlier prototype and must not be described as having executed the full architecture.
 

@@ -1,4 +1,8 @@
-# Running the architecture from the flowchart
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Running the architecture from the flowchart
+
+See the [current architecture diagram](ARCHITECTURE_DIAGRAM.md) for the registered-campaign workflow using `round_coordinator.py`. This guide also retains earlier experiment-entry-point history.
 
 ## Latest IPFS Desktop compatibility correction
 

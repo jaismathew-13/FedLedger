@@ -1,3 +1,5 @@
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
 > **Updated workflow:** See [PORTAL_WORKFLOW_GUIDE.md](PORTAL_WORKFLOW_GUIDE.md). Hospital-owned folders, MetaMask-authorized delegated clients and portal campaign controls are now implemented. The older roster/shared-data limitations below describe the earlier implementation and must not be used for new portal campaigns.
 
 # Local multi-hospital prototype

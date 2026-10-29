@@ -1,4 +1,6 @@
-# Architecture protocol v1
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Architecture protocol v1
 
 The user delegated choosing peer-validation and adaptive aggregation settings. These decisions are fixed before any full-architecture run. The completed prototype's validation scores have already been seen: this is a prospective amendment, not a claim that the protocol was registered before the earlier prototype. No test performance is used to choose these rules. Machine-readable settings: `architecture_protocol.json`; decision/weight calculations: `peer_policy.py`.
 

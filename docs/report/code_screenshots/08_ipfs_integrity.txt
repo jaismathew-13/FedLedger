@@ -1,0 +1,23 @@
+    def fetch(self, cid, expected_sha256, target):
+        self.validate_cid(cid)
+        target = Path(target)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        temporary = target.with_name(target.name + '.download')
+        try:
+            with self.post('cat', params={'arg': cid}, stream=True) as response, temporary.open('wb') as stream:
+                size = 0
+                total = int(response.headers['Content-Length']) if response.headers.get('Content-Length') else None
+                with ProgressBar(total=total, desc='IPFS retrieve '+target.name, unit='B', unit_scale=True,
+                          position=0, disable=self.progress_position == -1, leave=False, dynamic_ncols=True) as bar:
+                    for chunk in response.iter_content(1024 * 1024):
+                        size += len(chunk)
+                        if size > 256 * 1024 * 1024:
+                            raise ValueError('Checkpoint exceeds expected ResNet-18 artifact size limit.')
+                        stream.write(chunk)
+                        bar.update(len(chunk))
+            if sha256(temporary) != expected_sha256:
+                raise ValueError('IPFS content differs from the registered checkpoint digest.')
+            temporary.replace(target)
+        finally:
+            temporary.unlink(missing_ok=True)
+        return target

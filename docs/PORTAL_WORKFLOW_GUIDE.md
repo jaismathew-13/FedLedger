@@ -1,10 +1,12 @@
-# Hospital and administrator workflow
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Hospital and administrator workflow
 
 This guide supersedes the earlier local-client limitations in HOSPITAL_ONBOARDING.md. It describes the separate local campaign workflow; completed experimental artifacts and RESULTS.md remain unchanged.
 
 ## Hospital side
 
-1. Open http://127.0.0.1:8765/hospital. Click **Sign in browser wallet**, connect MetaMask if needed, and approve the login message. The portal verifies the signature and signs you in automatically; no signature paste or second sign-in click is needed. Submit an application if unregistered. The local training workspace, readiness controls and their navigation entries appear only after administrator approval. No owner private key is exported.
+1. Open http://127.0.0.1:8765/hospital. Click **Connect browser wallet** to connect MetaMask and preload the login challenge. Then click **Sign in browser wallet** and approve the message. The portal verifies the signature and signs you in automatically; no signature paste or second sign-in click is needed. Submit an application if unregistered. The local training workspace, readiness controls and their navigation entries appear only after administrator approval. No owner private key is exported.
 2. In **Local data & training workspace**, click **Prepare local client**. Review the authorization message, click **Sign client authorization**, and approve in MetaMask. The signature is submitted automatically and authorization is recorded without a separate confirmation button or signature field. This creates a separate development key and records its delegation in a separate local contract after verifying the owner's signature.
 3. The panel shows the hospital's own assigned folder under local_operations/hospital_data/HOSPITAL_CODE. Copy images into train/NORMAL, train/PNEUMONIA, val/NORMAL and val/PNEUMONIA. Keep originals unchanged; use COPY for any new split. No final test images belong in local training/validation.
 4. For filenames without reliable patient IDs, place patients.csv in that folder with columns `relative_path,patient_id`. Example relative path: `train/NORMAL/image.png`. Every unparsed image needs a mapped patient ID. IDs must identify real patients, not filenames masquerading as patient IDs.

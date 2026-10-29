@@ -1,4 +1,6 @@
-# Verify the actual blockchain independently of the dashboard
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Verify the actual blockchain independently of the dashboard
 
 The running blockchain is a local Hardhat Ethereum development node. The dashboard queries it through JSON-RPC. The commands below query that node directly using PowerShell; they do not call the dashboard or read its saved reports.
 

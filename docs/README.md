@@ -1,9 +1,12 @@
-# Project guides
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Project guides
 
 Start with [Project context](../PROJECT_CONTEXT.md) for the full system explanation.
 
 | Guide | Use |
 |---|---|
+| [Current architecture diagram](ARCHITECTURE_DIAGRAM.md) | Implemented portals, hospital workers, peer validation, IPFS and blockchain |
 | [Blockscout explorer](BLOCKSCOUT.md) | Independent visual explorer for the local Hardhat chain |
 | [Hospital and admin workflow](PORTAL_WORKFLOW_GUIDE.md) | Current onboarding, local data setup and campaigns |
 | [Operations](../OPERATIONS.md) | Service startup and blockchain lifecycle |

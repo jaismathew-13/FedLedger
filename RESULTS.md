@@ -1,4 +1,6 @@
-# Project results
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Project results
 
 ## Registered experiment
 

@@ -47,6 +47,8 @@ progress{height:7px;border:0;border-radius:10px;overflow:hidden}progress::-webki
 summary{cursor:pointer;padding:5px 0;color:#485a76}details[open]>summary{margin-bottom:18px}
 section[id],details[id],div[id]{scroll-margin-top:94px}
 .shell-overlay{display:none;position:fixed;inset:0;background:#111d3559;z-index:40;border:0;border-radius:0}
+.shell-logout{padding:7px 12px;font-size:12px;font-weight:600;color:#334155;background:white;border:1px solid #dce3ef;border-radius:8px;white-space:nowrap}
+.shell-logout:hover{background:#f1f5fb;border-color:#b9c7dd}
 body.sidebar-collapsed .app-sidebar{transform:translateX(-100%)}body.sidebar-collapsed main{margin-left:0}body.sidebar-collapsed .app-topbar{left:0}body.sidebar-collapsed #adminLogin{transform:none}
 @media(min-width:1600px){main{padding-left:60px;padding-right:60px}}
 @media(max-width:1050px){.grid{grid-template-columns:1fr}main{padding:104px 24px 30px}.app-topbar{padding:0 24px}#freshFields{grid-template-columns:repeat(2,minmax(0,1fr))}}

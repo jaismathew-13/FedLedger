@@ -1,4 +1,6 @@
-# Separate dashboard roles
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Separate dashboard roles
 
 ## Hospital users
 

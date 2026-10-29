@@ -19,6 +19,7 @@ from blockchain.client_authorization import ClientAuthorization
 from blockchain.hospital_directory import Directory
 from hospital_management import Management, now
 from patient_split_check import patient_id, IMAGE_EXTENSIONS
+from project_identity import DASHBOARD_NAME, PROJECT_TITLE
 
 
 class Workflow:
@@ -398,6 +399,8 @@ class Workflow:
                 attempts.append({key:value for key,value in attempt.items() if key in ('state','phase','round','updated_utc','completed_round')})
             item['prior_execution_attempts']=attempts
         data['exported_utc'] = now()
+        data['project_title'] = PROJECT_TITLE
+        data['dashboard_name'] = DASHBOARD_NAME
         data['export_note'] = 'Coordination metadata and approved evaluation only; no raw images, patient manifests or key files.'
         return data
 

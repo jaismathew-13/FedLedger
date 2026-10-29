@@ -1,0 +1,8 @@
+    function authorize(address owner, address delegate, bytes32 consentHash) external {
+        require(msg.sender == administrator && delegate != address(0), "Unauthorized");
+        (, bool approved,) = directory.memberships(owner);
+        require(approved && consentHash != 0, "Owner not approved");
+        delegates[owner] = delegate;
+        consentHashes[owner] = consentHash;
+        emit DelegateAuthorized(owner, delegate, consentHash);
+    }

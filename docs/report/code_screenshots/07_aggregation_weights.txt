@@ -1,0 +1,24 @@
+def aggregation_weights(updates):
+    """Return accepted update weights; an empty dict means retain prior global.
+
+    Input records have hospital_id, accepted, sample_count and peer_score.
+    Structural/finite tensor checks must happen before these decisions are used.
+    """
+    masses = {}
+    identities = set()
+    for update in updates:
+        identity = update['hospital_id']
+        if identity in identities:
+            raise ValueError('Duplicate hospital update in the same round.')
+        identities.add(identity)
+        if update['accepted'] is not True:
+            continue
+        count = update['sample_count']
+        score = float(update['peer_score'])
+        if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+            raise ValueError('Accepted updates require a positive integer sample count.')
+        if not math.isfinite(score) or not 0.5 < score <= 1:
+            raise ValueError('Accepted peer score must be finite and above chance.')
+        masses[identity] = count * score
+    total = math.fsum(masses.values())
+    return {identity: mass / total for identity, mass in masses.items()} if masses else {}

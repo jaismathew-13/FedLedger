@@ -1,4 +1,6 @@
-# Dashboard feature coverage
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Dashboard feature coverage
 
 Open http://127.0.0.1:8765 and refresh to load the six sections. Uses the existing HTML/JavaScript and local Python service, without Streamlit.
 

@@ -1,4 +1,6 @@
-# IPFS Desktop connected to the project
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## IPFS Desktop connected to the project
 
 IPFS Desktop now controls the same storage used by Python through a local API pointer. A separately managed project Kubo process runs the node, because Desktop cannot directly manage a private-swarm repo.
 

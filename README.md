@@ -1,4 +1,6 @@
-# Fed-Ledger
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## FedLedger ? Project overview
 
 A local hospital federation prototype using ResNet-18/FedProx, peer validation,
 IPFS model storage and Ethereum/Solidity audit records.

@@ -1,4 +1,6 @@
-# Project context
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Project context
 
 Updated 25 October 2026. Current consolidated project handoff. This describes a local research prototype, not a production hospital deployment. Earlier revisions are preserved under archive/document_history/.
 
@@ -425,3 +427,25 @@ Renaming the displayed workspace does not update previously registered data mani
 ## Retired obsolete active data registrations
 
 The current SNRSE/ASTER/RGRI code folders were byte-hashed and have no cross-hospital exact image overlap. Their data assignments differ from the original UUID registrations, which caused sequential registration to conflict with another hospital's stale manifest. After a SQLite/client-row backup and confirming no active training, only obsolete active manifest/summary pointers were cleared. Original manifests, campaign history, signed delegations and all image files were retained. Audit and retirement records are in multiseed_outputs/workspace_overlap_diagnosis.json and legacy_registration_retirement.json. Each hospital must register its code-named folder before a new campaign; exact-image and patient-overlap checks remain enforced. Zero byte overlap does not establish perceptual or patient independence.
+
+## Wallet request sequencing
+
+Connect browser wallet now connects and preloads the expiring login challenge. Sign in browser wallet requests personal_sign directly from the click, without a preceding network/account request. The client authorization button also signs its already-prepared message directly; account/session checks follow the signature and server verification remains enforced. This restores preloaded-message behavior without restoring the removed preview or signature fields. MetaMask/browser focus behavior still cannot be guaranteed; pending-request hints remain.
+
+## Fresh-chain startup review (27 October 2026)
+
+The startup path now initializes workflow tables for empty installations, archives failed campaigns without deleting their error/history, verifies complete round sequences and all contract dependencies, refuses foreign RPC services, and acquires the training/migration lock. An atomic migration journal and archive hash checks support recovery after partial deployment or database-reset failure. The healthy-chain check is repeated under the lock to avoid competing-startup replacement. Scientific training logic and datasets are unchanged. Fifteen isolated mocked startup checks passed; evidence is in multiseed_outputs/fresh_chain_startup_checks.json. A read-only live probe found the local chain unavailable, so no real reset/deployment was attempted. Readiness findings are in multiseed_outputs/fresh_chain_live_preflight.json.
+
+## Blockscout explorer operational (27 October 2026)
+
+Docker engine and WSL2 are now running. Local services were started using the archived fresh-chain workflow; all original campaign JSON, model/data files and previous chain evidence remain preserved. Hospital approvals/delegations require renewal on this new instance. Blockscout now serves http://localhost:4000 independently of the project dashboard. Its homepage, Blocks page and block/transaction API were checked; all indexed blocks and deployment receipts matched direct Hardhat RPC. Exact image digests and comparisons are recorded in multiseed_outputs/blockscout/live_verification.json. No training was launched. Later chain resets require stopping the old explorer/index first and following docs/BLOCKSCOUT.md so historical indexes are not silently reused.
+
+## Administrator authentication controls
+
+The duplicate Administrator review token field and Load administration view/Clear credentials controls were removed from Hospital Management. The existing sign-in page now retains its token in a JavaScript memory variable, and hospital administration loads automatically after successful login. An admin-only Logout button appears in the top navbar after login; it clears the in-memory token and returns to sign-in. Decision feedback remains next to Record decision and is hidden until used. No authentication checks were removed or credentials persisted in browser storage.
+
+Hospital approval/rejection/suspension no longer requires a typed review reason. The admin reason field was removed; the server accepts an omitted reason while retaining administrator authorization, status-transition checks and decision/transaction audit records. Optional reasons from other clients remain limited to500characters.
+
+## Project title and dashboard name ? 28 October 2026
+
+The dashboard product name is **FedLedger**. Use **Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain** as the formal title for documentation and newly created reports. Shared display labels are defined in `project_identity.py`; they do not replace signed-message domains or immutable protocol identifiers. Historical evidence files remain unchanged.

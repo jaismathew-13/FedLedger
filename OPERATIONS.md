@@ -1,4 +1,6 @@
-# Operation and reproducibility
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Operation and reproducibility
 
 ## Existing completed run
 

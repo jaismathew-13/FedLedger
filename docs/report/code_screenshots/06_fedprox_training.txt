@@ -1,0 +1,11 @@
+            optimizer.zero_grad(set_to_none=True)
+            loss = criterion(client_model(images), labels)
+
+            if mu > 0:
+                prox = torch.zeros((), device=device)
+                for lp, gp in zip(client_model.parameters(), global_params):
+                    prox = prox + (lp - gp).pow(2).sum()
+                loss = loss + (mu / 2.0) * prox
+
+            loss.backward()
+            optimizer.step()

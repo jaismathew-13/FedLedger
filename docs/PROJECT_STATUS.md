@@ -1,4 +1,6 @@
-# Project status: full architecture implemented, new run not started
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Project status: full architecture implemented, new run not started
 
 ## Latest architecture instruction
 

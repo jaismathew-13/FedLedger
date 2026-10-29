@@ -15,11 +15,19 @@
   const icon = name => `<svg class="shell-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${paths[name]}"/></svg>`;
   const sidebar = document.createElement('aside');
   sidebar.id = 'appSidebar';sidebar.className = 'app-sidebar';
-  sidebar.innerHTML = `<div class="sidebar-brand"><span class="brand-mark">F</span><div><div class="brand-name">Fed-Ledger</div><div class="brand-subtitle">Federated intelligence</div></div></div><div class="sidebar-label">${role} workspace</div><nav class="shell-nav" aria-label="${role} navigation"></nav><div class="sidebar-bottom"><strong>Local research environment</strong>ResNet-18 / FedProx<br><a href="${admin?'/hospital':'/admin'}">${admin?'Open hospital portal':'Administrator sign-in'} &rarr;</a></div>`;
+  sidebar.innerHTML = `<div class="sidebar-brand"><span class="brand-mark">F</span><div><div class="brand-name">FedLedger</div><div class="brand-subtitle">Federated intelligence</div></div></div><div class="sidebar-label">${role} workspace</div><nav class="shell-nav" aria-label="${role} navigation"></nav><div class="sidebar-bottom"><strong>Local research environment</strong>ResNet-18 / FedProx<br><a href="${admin?'/hospital':'/admin'}">${admin?'Open hospital portal':'Administrator sign-in'} &rarr;</a></div>`;
   const bar = document.createElement('div');bar.className='app-topbar';
   bar.innerHTML=`<div class="top-left"><button class="menu-toggle" aria-label="Toggle navigation" aria-controls="appSidebar" aria-expanded="true">${icon('menu')}</button><div><div class="top-heading">${role} dashboard</div><div class="top-caption">Pneumonia research / ${admin?'Network coordination':'Hospital workspace'}</div></div></div><div class="top-right"><span class="environment-chip">Local prototype</span><span class="role-avatar" aria-label="${role}">${admin?'AD':'HP'}</span></div>`;
   const overlay=document.createElement('button');overlay.className='shell-overlay';overlay.setAttribute('aria-label','Close navigation');overlay.tabIndex=-1;
   document.body.prepend(sidebar,bar,overlay);
+  let logoutButton;
+  if(admin){
+    logoutButton=document.createElement('button');logoutButton.type='button';
+    logoutButton.id='adminNavLogout';logoutButton.className='shell-logout';
+    logoutButton.textContent='Logout';logoutButton.hidden=true;
+    logoutButton.setAttribute('aria-label','Log out of the administrator dashboard');
+    logoutButton.onclick=()=>window.logoutAdmin();bar.querySelector('.top-right').append(logoutButton);
+  }
   const nav=sidebar.querySelector('nav'), toggle=bar.querySelector('button'), mobile=()=>matchMedia('(max-width:760px)').matches;
   const links=admin?[['campaignOverview','Overview','overview'],['hospitals','Hospitals','hospitals'],['roundOperations','Training campaigns','training'],['currentExplorer','Blockchain explorer','client'],['prediction','Model prediction','prediction'],['experimentHistory','Experiment history','history']]:
     [['workspace','My hospital','hospitals'],['clientWorkspace','Local client & data','client'],['participation','Participation','training'],['prediction','Model prediction','prediction']];
@@ -29,6 +37,7 @@
   overlay.onclick=close;document.addEventListener('keydown',e=>{if(e.key==='Escape'){close();toggle.focus()}});window.addEventListener('resize',sync);
   function render(){
     const loggedIn=admin?!document.getElementById('adminApp').hidden:!document.getElementById('workspace').hidden;
+    if(logoutButton)logoutButton.hidden=!loggedIn;
     const items=loggedIn?links.filter(([id])=>{const target=document.getElementById(id);return target&&!target.closest('[hidden]')}):[[admin?'adminLogin':'signIn','Sign in','wallet']];
     const key=String(loggedIn)+items.map(([id])=>id).join(',');if(nav.dataset.state===key)return;nav.dataset.state=key;nav.replaceChildren();
     for(const [id,label,name] of items){const a=document.createElement('a');a.href='#'+id;a.innerHTML=icon(name);a.append(document.createTextNode(label));

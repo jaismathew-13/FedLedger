@@ -135,8 +135,10 @@ class Management:
         self.admin(token)
         identity, action = payload.get('id'), payload.get('action')
         reason = str(payload.get('reason', '')).strip()
-        if action not in ('approve', 'reject', 'suspend') or not 5 <= len(reason) <= 500:
-            raise ValueError('Provide approve/reject/suspend and a review reason (5–500 characters).')
+        if action not in ('approve', 'reject', 'suspend'):
+            raise ValueError('Provide approve, reject or suspend.')
+        if len(reason) > 500:
+            raise ValueError('Optional review reason must be at most 500 characters.')
         with self.connection() as db:
             db.execute('BEGIN IMMEDIATE')
             row = db.execute('SELECT * FROM hospitals WHERE id=?', (identity,)).fetchone()

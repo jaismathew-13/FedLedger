@@ -7,6 +7,7 @@ from pathlib import Path
 from architecture_io import sha256, write_json
 from progress_display import ProgressBar
 from train_fedprox import record
+from project_identity import DASHBOARD_NAME, PROJECT_TITLE
 
 
 def main():
@@ -53,7 +54,8 @@ def main():
         loss, true, predicted, scores = fl.evaluate(model, batches, 'cpu')
     output = Path('multiseed_outputs')/'independent'/sha256(args.manifest)[2:]
     output.mkdir(parents=True, exist_ok=False)
-    write_json(output/'metrics.json', {'metrics': fl.compute_metrics(true, predicted, scores),
+    write_json(output/'metrics.json', {'project_title': PROJECT_TITLE,
+        'dashboard_name': DASHBOARD_NAME, 'metrics': fl.compute_metrics(true, predicted, scores),
         'loss': loss, 'images': len(pairs), 'patients': None if args.image_level_unverified else len(patients),
         'evaluation_scope': 'image_level_patient_independence_unverified' if args.image_level_unverified else 'operator_confirmed_patient_independence',
         'checkpoint_sha256': reference['sha256'], 'manifest_sha256': sha256(args.manifest),

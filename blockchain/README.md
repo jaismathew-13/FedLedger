@@ -1,4 +1,6 @@
-# Ethereum model registry prototype
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Ethereum model registry prototype
 
 ## Current scope
 

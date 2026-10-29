@@ -58,5 +58,5 @@
  section.querySelectorAll('[data-control]').forEach(button=>button.onclick=()=>act(async()=>{let result=await api('control',{campaign:el('opsCampaign').value,command:button.dataset.control});await refresh();return result}));
  el('opsSendFeedback').onclick=()=>act(()=>api('feedback',{campaign:el('opsCampaign').value,hospital:el('opsRecipient').value,message:el('opsFeedback').value}));
  el('opsExport').onclick=()=>act(async()=>{let d=await api('export');let u=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));let a=document.createElement('a');a.href=u;a.download='fed-ledger-campaign-audit.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);return {exported:true}});
- setInterval(()=>{if(!el('adminApp').hidden&&el('adminToken').value)refresh().catch(e=>el('opsMessage').textContent=e.message)},7000);
+ setInterval(()=>{if(!el('adminApp').hidden&&hasAdminSession())refresh().catch(e=>el('opsMessage').textContent=e.message)},7000);
 })();

@@ -1,4 +1,6 @@
-# Demonstration and presentation guide
+# Privacy Preserving Federated Learning for Multi-Institutional Pneumonia Prediction Using Blockchain
+
+## Demonstration and presentation guide
 
 ## Demonstration sequence
 

@@ -1,0 +1,15 @@
+{
+  "checked_utc": "2026-10-28T14:42:38.838274+00:00",
+  "source": "docs\\report\\fedledger_report_corrected.tex",
+  "checks": {
+    "balanced_environments": true,
+    "balanced_braces": true,
+    "all_citations_defined": true,
+    "unique_labels_and_defined_references": true,
+    "embedded_architecture_and_bibliography": true,
+    "smoke_percentages_match_saved_evidence": true
+  },
+  "bibliography_entries": 12,
+  "pdf_compiled": false,
+  "limitation": "No LaTeX engine found on PATH; typography and page layout not rendered."
+}

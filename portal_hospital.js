@@ -5,6 +5,7 @@
  section.innerHTML=`<div class="eyebrow">Your local hospital client</div><h2>Local data &amp; training workspace</h2>
  <p class="muted">No MetaMask private-key export is needed. Authorize a separate development client and configure only your hospital-owned folder. Other hospital users and admin APIs cannot view its raw files.</p>
  <div class="controls"><button id="clientPrepare">Prepare local client</button><button id="clientSign" disabled>Sign client authorization</button></div>
+ <p id="clientAuthStatus" class="muted" role="status" aria-live="polite">Prepare the client, then sign its authorization message in MetaMask.</p>
  <textarea id="clientMessage" rows="5" readonly style="width:100%" aria-label="Client authorization message"></textarea>
  <h3>Your data folder</h3><pre id="clientFolder" class="audit-output"></pre><p class="muted">Copy images into train/NORMAL, train/PNEUMONIA, val/NORMAL, val/PNEUMONIA. Original files must remain unchanged. If IDs cannot be inferred, add patients.csv with relative_path,patient_id. Use the same patient namespace for IDs from the same source. A different namespace does not prove independence.</p>
  <label>Patient-ID namespace <input id="clientNamespace" placeholder="Documented source namespace"></label><button id="clientConfigure">Check &amp; register local data</button>
@@ -25,10 +26,11 @@
  async function refresh(){if(!session||profile?.application?.status!=='approved'){section.hidden=true;data=null;return}const activeSession=session;const next=await api('me');if(session!==activeSession||profile?.application?.status!=='approved'){section.hidden=true;return}data=next;section.hidden=false;el('clientFolder').textContent=data.data_folder+'\nLast successful global synchronization: '+(data.clients[0]?.last_successful_sync||'Not yet recorded');let d=data.clients[0]?.data;el('clientFolderStatus').textContent=d&&data.clients[0]?.workspace_data_current===false?'Your registered data still uses the preserved previous folder. Click Check & register local data to register this code-named workspace for future campaigns. Existing campaign records remain unchanged.':'';tableHere('clientSummary',['Data version','Train images','Validation images','Class distribution'],[[d?.version,d?.train_images,d?.val_images,d?JSON.stringify(d.class_counts):'Not configured']]);let current=el('clientCampaign').value;el('clientCampaign').replaceChildren();for(let c of data.campaigns){let o=document.createElement('option');o.value=c.registration.id;o.textContent=c.registration.id.slice(0,8)+' / '+c.status.state;el('clientCampaign').append(o)}if(data.campaigns.some(c=>c.registration.id===current))el('clientCampaign').value=current;let versions=el('version');let currentModel=versions.value;versions.querySelectorAll('option[data-campaign]').forEach(o=>o.remove());for(let c of data.campaigns)for(let r of c.rounds.filter(r=>r.global)){let o=document.createElement('option');o.dataset.campaign=c.registration.id;o.value='portal:'+c.registration.id+':'+r.round;o.textContent='Campaign '+c.registration.id.slice(0,8)+' / global '+r.round;versions.append(o)}if([...versions.options].some(o=>o.value===currentModel))versions.value=currentModel;
   syncPredictionChoices();render();return {status:'Own client workspace refreshed'}}
  let authorizationBusy=false;
+ function authorizationStatus(message){el('clientAuthStatus').textContent=message;el('clientNotice').textContent=message}
  function authorizationControls(){el('clientPrepare').disabled=authorizationBusy;el('clientSign').disabled=authorizationBusy||!el('clientMessage').value}
  el('clientPrepare').onclick=()=>act(async()=>{
   if(authorizationBusy)return;authorizationBusy=true;authorizationControls();const activeSession=session;
-  try{const d=await api('prepare-agent',{});if(session!==activeSession)throw Error('Wallet session changed. Prepare the client again.');el('clientMessage').value=d.message;el('clientFolder').textContent=d.data_folder;return {delegate:d.delegate,message:'Review the message, then click Sign client authorization. Approval in MetaMask completes authorization automatically.'}}
+  try{const d=await api('prepare-agent',{});if(session!==activeSession)throw Error('Wallet session changed. Prepare the client again.');el('clientMessage').value=d.message;el('clientFolder').textContent=d.data_folder;authorizationStatus('Client prepared. Click Sign client authorization to request MetaMask approval.');return {delegate:d.delegate,message:'Review the message, then click Sign client authorization. Approval in MetaMask completes authorization automatically.'}}
   finally{authorizationBusy=false;authorizationControls()}
  });
  el('clientSign').onclick=()=>act(async()=>{
@@ -37,18 +39,16 @@
   const owner=profile.wallet,activeSession=session,message=el('clientMessage').value;
   authorizationBusy=true;authorizationControls();
   try{
-   el('clientNotice').textContent='Connecting to MetaMask. Unlock the wallet if prompted.';
-   let accounts=await window.ethereum.request({method:'eth_requestAccounts'});
-   if(session!==activeSession)throw Error('Wallet session changed. Sign in and prepare the client again.');
-   if(accounts[0]?.toLowerCase()!==owner.toLowerCase())throw Error('Select the signed-in hospital owner account in MetaMask.');
-   el('clientNotice').textContent='Approve the client authorization message in MetaMask.';
+   authorizationStatus('Approval pending in MetaMask. If no window appears, click the MetaMask toolbar icon to review the request. Do not submit another request.');
+   // The owner connected at login and Prepare already loaded the message.
+   // Request signing directly from this click without an earlier async RPC.
    const signature=await window.ethereum.request({method:'personal_sign',params:[message,owner]});
-   accounts=await window.ethereum.request({method:'eth_accounts'});
+   const accounts=await window.ethereum.request({method:'eth_accounts'});
    if(session!==activeSession||accounts[0]?.toLowerCase()!==owner.toLowerCase())throw Error('Wallet account changed. Sign in and prepare the client again.');
-   el('clientNotice').textContent='Signature approved. Recording client authorization...';
+   authorizationStatus('Signature approved. Recording client authorization...');
    const d=await api('authorize-agent',{signature});el('clientMessage').value='';
-   await refresh();return {status:'Client authorization completed',...d};
-  }catch(e){if(e.code===4001)throw Error('Authorization declined in MetaMask. You can try signing again.');if(e.code===-32002)throw Error('A MetaMask request is already pending. Open the MetaMask extension and complete or reject it before trying again.');throw e}
+   authorizationStatus('Client authorization recorded successfully.');await refresh();return {status:'Client authorization completed',...d};
+  }catch(e){const message=e.code===4001?'Authorization declined in MetaMask. You can try signing again.':e.code===-32002?'A MetaMask request is already pending. Open the MetaMask extension and complete or reject it before trying again.':e.message;authorizationStatus(message);throw Error(message)}
   finally{authorizationBusy=false;authorizationControls()}
  });
  el('clientConfigure').onclick=()=>act(async()=>{let d=await api('configure',{patient_namespace:el('clientNamespace').value});await refresh();return d});el('clientCampaign').onchange=render;
